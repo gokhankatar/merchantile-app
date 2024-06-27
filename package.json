@@ -1,0 +1,36 @@
+{
+  "name": "merchantile-app",
+  "version": "0.0.0",
+  "private": true,
+  "author": {
+    "name": "Gokhan",
+    "surname": "Katar",
+    "email": "katar_gokhan@hotmail.com",
+    "github": "https://github.com/gokhankatar"
+  },
+  "scripts": {
+    "serve": "vite preview",
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mdi/font": "5.9.55",
+    "axios": "^1.7.2",
+    "firebase": "^10.12.2",
+    "roboto-fontface": "*",
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.0",
+    "vuetify": "^3.0.0-beta.0",
+    "vuex": "^4.0.2",
+    "vuex-persist": "^3.1.3",
+    "webfontloader": "^1.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.1",
+    "vite-plugin-vuetify": "^1.0.0-alpha.12",
+    "vue-cli-plugin-vuetify": "~2.5.8"
+  },
+  "type": "module"
+}
