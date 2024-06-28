@@ -108,13 +108,17 @@ const onLogin = () => {
       const q = query(docRef, where("id", "==", res.data.localId));
       const qs = await getDocs(q);
       const userData = qs.docs[0].data();
-      console.log("user data", userData);
+
+      // save to store
+      store.commit("setFullName", userData.fullName);
+      store.commit("setUserInfo", res.data);
 
       // after login with successfully
       error.value = false;
       console.log("res data", res.data);
       router.replace("/");
     })
+    // ! error state
     .catch((e) => {
       error.value = true;
       console.log(e);

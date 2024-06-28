@@ -82,8 +82,6 @@
               class="my-2"
               v-model="model.file"
               :rules="modelRules.file"
-              :error="true"
-              :error-messages="'errrooor'"
               color="blue-grey"
               :prepend-icon="null"
               prepend-inner-icon="mdi-file"
@@ -111,6 +109,7 @@ import { getStorage, uploadBytes, ref as fileRef } from "firebase/storage";
 import { onMounted, ref, reactive } from "vue";
 import { getDb } from "../db/db";
 import { useRoute, useRouter } from "vue-router";
+import store from "../store/store";
 
 const route = useRoute();
 const router = useRouter();
@@ -120,34 +119,6 @@ const isValid = ref(true);
 const db = getDb();
 
 const categoriesData = reactive([]);
-
-// upload image
-const upLoadImage = async () => {
-  const storage = getStorage();
-  const fileName = Date.now().toString() + "_" + model.file[0].name;
-  const imageRef = fileRef(storage, "images/" + fileName);
-  const data = await uploadBytes(imageRef, model.file[0]);
-  return fileName;
-};
-
-// create product
-const createProduct = async () => {
-  try {
-    const fileName = await upLoadImage();
-    const docRef = await addDoc(collection(db, "products"), {
-      name: model.name,
-      description: model.description,
-      price: model.price,
-      address: model.address,
-      image: fileName,
-      category: model.category,
-      userId: "", // from store
-    });
-    router.replace("/");
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 // model for binding
 const model = reactive({
@@ -175,8 +146,36 @@ const modelRules = reactive({
     (v) => (v && v.length >= 6) || "Description must be longer than 5",
   ],
   categoryRules: [(v) => !!v || "Category is required!"],
-  file: false,
+  file: [(v) => !!v || "File is required!"],
 });
+
+// upload image
+const upLoadImage = async () => {
+  const storage = getStorage();
+  const fileName = Date.now().toString() + "_" + model.file.name;
+  const imageRef = fileRef(storage, "images/" + fileName);
+  const data = await uploadBytes(imageRef, model.file[0]);
+  return fileName;
+};
+
+// create product
+const createProduct = async () => {
+  try {
+    const fileName = await upLoadImage();
+    const docRef = await addDoc(collection(db, "products"), {
+      name: model.name,
+      description: model.description,
+      price: model.price,
+      address: model.address,
+      image: fileName,
+      category: model.category,
+      userId: store.getters.getUserId, // from store
+    });
+    router.replace("/");
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // form validate
 const validate = async () => {
