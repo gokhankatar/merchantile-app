@@ -37,7 +37,9 @@
 
   <v-main>
     <v-container>
-      <div class="cursor-pointer" @click="$router.replace('/')">Anasayfa</div>
+      <h3 class="text-h5 text-blue-grey cursor-pointer" @click="$router.replace('/')">
+        Merhcantile App
+      </h3>
       <div class="mt-12">
         <slot />
       </div>
@@ -76,7 +78,7 @@ const items = [
     icon: "mdi-heart",
   },
   {
-    title: "Create Product",
+    title: "Create/Edit Product",
     value: "/create-product",
     icon: "mdi-plus",
   },

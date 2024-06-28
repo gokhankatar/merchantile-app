@@ -1,1 +1,1 @@
-## Create Product Sayfası kodlama
+## user bilgilerini store üzerinden olusturcaz
