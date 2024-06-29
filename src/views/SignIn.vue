@@ -110,6 +110,7 @@ const onLogin = () => {
       const userData = qs.docs[0].data();
 
       // save to store
+      localStorage.setItem("userName", userData.fullName);
       store.commit("setFullName", userData.fullName);
       store.commit("setUserInfo", res.data);
 

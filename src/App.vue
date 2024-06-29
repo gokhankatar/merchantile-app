@@ -10,7 +10,41 @@
 
 <script setup>
 import { initFirebase } from "./db/db";
+import store from "./store/store";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 // first of all initialized firebase
 initFirebase();
+
+// auth control
+const controlUser = () => {
+  const userInfo = localStorage.getItem("userInfo");
+  const expDate = localStorage.getItem("expDate");
+  const userName = localStorage.getItem("userName");
+
+  try {
+    if (Date.now() > Number(expDate)) {
+      store.commit("setUserInfo", {});
+      localStorage.clear();
+      router.replace("/signin");
+    }
+
+    // auto logout
+    const time = Number(expDate) - Date.now();
+    setTimeout(() => {
+      store.commit("setUserInfo", {});
+      localStorage.clear();
+      router.replace("/signin");
+    }, time);
+
+    store.commit("setUserInfo", JSON.parse(userInfo));
+    store.commit("setFullName", userName);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+controlUser();
 </script>

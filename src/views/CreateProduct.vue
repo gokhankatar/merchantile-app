@@ -110,6 +110,7 @@ import { onMounted, ref, reactive } from "vue";
 import { getDb } from "../db/db";
 import { useRoute, useRouter } from "vue-router";
 import store from "../store/store";
+import { errorMessages } from "vue/compiler-sfc";
 
 const route = useRoute();
 const router = useRouter();
@@ -154,7 +155,7 @@ const upLoadImage = async () => {
   const storage = getStorage();
   const fileName = Date.now().toString() + "_" + model.file.name;
   const imageRef = fileRef(storage, "images/" + fileName);
-  const data = await uploadBytes(imageRef, model.file[0]);
+  const data = await uploadBytes(imageRef, model.file);
   return fileName;
 };
 

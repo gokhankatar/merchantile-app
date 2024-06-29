@@ -1,12 +1,12 @@
 <template>
-  <v-app-bar>
+  <v-app-bar class="d-flex justify-space-between px-5">
     <v-btn icon="mdi-menu" @click="drawer = !drawer"></v-btn>
     <v-spacer></v-spacer>
     <v-menu min-width="200px" rounded>
       <template v-slot:activator="{ props }">
         <v-btn :="props" icon>
           <v-avatar color="blue-grey">
-            <span class="text-subtitle-1 font-weight-bold">GK</span>
+            <span class="text-subtitle-1 font-weight-bold">{{ store.getters.getFullName }}</span>
           </v-avatar>
         </v-btn>
       </template>
@@ -49,10 +49,11 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import store from '../store/store';
 
 const route = useRoute();
 
-const drawer = ref(true);
+const drawer = ref(false);
 const activeRouteItem = ref(null);
 
 watch(
@@ -67,6 +68,11 @@ onMounted(() => {
 });
 
 const items = [
+  {
+    title: "Home",
+    value: "/",
+    icon: "mdi-home",
+  },
   {
     title: "My Products",
     value: "/my-products",

@@ -14,8 +14,15 @@ const store = createStore({
     },
     getters: {
         getFullName(state) {
-            return state.fullName.split(" ")[0][0] + state.fullName.split(" ")[1][0];
-            // for example "Gokhan Katar = GK"
+            const fullName = state.fullName;
+
+
+            if (fullName && fullName.split(" ").length >= 2) {
+                // for example "Gokhan Katar = GK"
+                return fullName.split(" ")[0][0] + fullName.split(" ")[1][0];
+            } else {
+                return "NA";
+            }
         },
         getUserInfo(state) {
             return state.userInfo;

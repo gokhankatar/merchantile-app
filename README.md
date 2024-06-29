@@ -1,6 +1,1 @@
-## user bilgilerini store üzerinden olusturcaz
-
-## ! PRODUCT OLUSTURMA UNAUTHORIZED HATASI VAR!
-## LOGIN OLAN KULLANICI URUN YARATAMIYOR YANI VERITABANINA DOSYA GONDEREMIYOR (PRODUCT COLLECTION)
-
-## D U Z E L T ! ! !
+## product detail page 
