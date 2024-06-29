@@ -38,7 +38,7 @@
   <v-main>
     <v-container>
       <h3 class="text-h5 text-blue-grey cursor-pointer" @click="$router.replace('/')">
-        Merhcantile App
+        Merchantile App
       </h3>
       <div class="mt-12">
         <slot />

@@ -14,7 +14,7 @@
         <v-img
           :src="imgUrl + item.image + '?alt=media'"
           :lazy-src="imgUrl + item.image + '?alt=media'"
-          max-height="300px"
+          height="300px"
           contain
           cover
           object-position="center"
@@ -27,6 +27,7 @@
 
         <v-card-actions>
           <v-btn
+            @click="$router.replace(`/product-detail/${item.id}`)"
             class="bg-blue-grey border-none"
             size="small"
             rounded="xl"

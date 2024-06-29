@@ -1,1 +1,1 @@
-## product detail page 
+## category page 

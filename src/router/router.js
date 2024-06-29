@@ -10,6 +10,7 @@ import CreateProduct from '../views/CreateProduct.vue';
 import MyFavorites from '../views/MyFavorites.vue';
 import MySaved from '../views/MySaved.vue';
 import Categories from '../views/Categories.vue';
+import ProductDetail from '../views/ProductDetail.vue';
 
 const routes = [
     {
@@ -17,6 +18,7 @@ const routes = [
         name: "HomePage",
         component: HomeView,
         meta: {
+            title: 'Home',
             public: true,
             layout: MainLayout
         }
@@ -26,6 +28,7 @@ const routes = [
         name: "SinginPage",
         component: SignIn,
         meta: {
+            title: 'Sign In',
             layout: AuthLayout,
             public: true
         }
@@ -35,6 +38,7 @@ const routes = [
         name: "SignupPage",
         component: SignUp,
         meta: {
+            title: 'Sign Up',
             layout: AuthLayout,
             public: true
         }
@@ -44,6 +48,7 @@ const routes = [
         name: "MyProductsPage",
         component: MyProducts,
         meta: {
+            title: 'My Products',
             layout: MainLayout,
             public: true
         }
@@ -53,6 +58,7 @@ const routes = [
         name: "CreateProductPage",
         component: CreateProduct,
         meta: {
+            title: 'Create Product',
             layout: MainLayout,
             public: true
         }
@@ -62,6 +68,7 @@ const routes = [
         name: "MyFavoritesPage",
         component: MyFavorites,
         meta: {
+            title: 'My Favorites',
             layout: MainLayout,
             public: true
         }
@@ -71,6 +78,7 @@ const routes = [
         name: "MySavedPage",
         component: MySaved,
         meta: {
+            title: 'My Saved',
             layout: MainLayout,
             public: true
         }
@@ -80,15 +88,31 @@ const routes = [
         name: "CategoriesPage",
         component: Categories,
         meta: {
+            title: 'Categories',
             layout: MainLayout,
             public: true
         }
     },
+    {
+        path: '/product-detail/:id',
+        name: "ProductDetailPage",
+        component: ProductDetail,
+        meta: {
+            title: 'Detail',
+            layout: MainLayout,
+            public: true
+        }
+    }
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
-})
+});
+
+router.beforeEach((to, from, next) => {
+    document.title = 'Merchantile App | ' + to.meta.title;
+    next();
+});
 
 export default router;
