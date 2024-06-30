@@ -1,5 +1,5 @@
 <template>
-  <v-row class="d-flex flex-wrap ga-5">
+  <v-row class="d-flex flex-wrap ga-5 ga-sm-0">
     <v-col
       v-for="item of productData"
       :key="item"
@@ -76,8 +76,26 @@
     </v-col>
   </v-row>
 
+  <div
+    v-if="isLoading === false && productData.length === 0"
+    class="d-flex justify-center align-center"
+  >
+    <h3 class="text-subtitle-1 text-sm-h3">Sorry no data available yet!</h3>
+  </div>
+
+  <!-- toast -->
   <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
   <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
+
+  <!-- loading bar -->
+  <v-progress-circular
+    class="loading-bar"
+    v-if="isLoading"
+    :size="90"
+    :width="9"
+    color="blue-grey"
+    indeterminate
+  ></v-progress-circular>
 </template>
 
 <script setup>
@@ -89,6 +107,7 @@ import { collection, getDocs, where, query, addDoc, deleteDoc } from "firebase/f
 
 const route = useRoute();
 
+const isLoading = ref(false);
 const myFavorites = ref([]);
 const mySaved = ref([]);
 const isAddedFav = ref(false);
@@ -210,11 +229,50 @@ const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
 const productData = ref([]);
 const db = getDb();
 
+const getDataByCategory = async (categoryId) => {
+  isLoading.value = true;
+
+  const docRef = collection(db, "products");
+  const q = query(docRef, where("category.id", "==", categoryId));
+  const qs = await getDocs(q);
+  qs.forEach((doc) => {
+    const data = doc.data();
+    const findedFav = myFavorites.value.find(
+      (f) => f.favUserId == store.getters.getUserId && f.id == doc.id
+    );
+    const findedSaved = mySaved.value.find(
+      (f) => f.savedUserId == store.getters.getUserId && f.id == doc.id
+    );
+
+    if (findedFav) {
+      data.isFav = true;
+    } else {
+      data.isFav = false;
+    }
+
+    if (findedSaved) {
+      data.isSaved = true;
+    } else {
+      data.isSaved = false;
+    }
+
+    productData.value.push({
+      ...data,
+      id: doc.id,
+    });
+  });
+
+  isLoading.value = false;
+};
+
 onMounted(async () => {
+  isLoading.value = true;
+
   await getMyFavorites();
   await getMySaved();
 
   if (route.query.q) {
+    getDataByCategory(route.query.q.split("-")[1]);
   } else {
     const qs = await getDocs(collection(db, "products"));
     qs.forEach((doc) => {
@@ -244,6 +302,8 @@ onMounted(async () => {
       });
     });
   }
+
+  isLoading.value = false;
 });
 </script>
 
@@ -252,7 +312,13 @@ onMounted(async () => {
   transition: all 0.4s ease;
 }
 .card:hover {
-  scale: 1.1;
-  box-shadow: 0 0 2rem #668290;
+  scale: 0.9;
+  box-shadow: 0 0 2.5rem #668290;
+}
+.loading-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

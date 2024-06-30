@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="isLoading == false">
     <div class="my-10 w-100 d-flex flex-column align-sm-center flex-sm-row ga-2 ga-sm-5">
       <v-img
         :src="imgUrl + productDetailData.image + '?alt=media'"
@@ -68,9 +68,19 @@
     </div>
   </v-row>
 
+  <!-- toast -->
   <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
   <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
 
+  <!-- loading bar -->
+  <v-progress-circular
+    class="loading-bar"
+    v-if="isLoading"
+    :size="90"
+    :width="9"
+    color="blue-grey"
+    indeterminate
+  ></v-progress-circular>
 </template>
 
 <script setup>
@@ -92,6 +102,7 @@ import store from "../store/store";
 const route = useRoute();
 const router = useRouter();
 
+const isLoading = ref(false);
 const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
 const isAddedFav = ref(false);
 const isAddedSave = ref(false);
@@ -221,7 +232,17 @@ const getData = async (id) => {
 };
 
 onMounted(() => {
+  isLoading.value = true;
   getData(route.params.id);
+  isLoading.value = false;
 });
 </script>
 
+<style scoped>
+.loading-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>

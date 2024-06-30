@@ -6,7 +6,9 @@
       <template v-slot:activator="{ props }">
         <v-btn :="props" icon>
           <v-avatar color="blue-grey">
-            <span class="text-subtitle-1 font-weight-bold">{{ store.getters.getFullName }}</span>
+            <span class="text-subtitle-1 font-weight-bold">{{
+              store.getters.getFullName
+            }}</span>
           </v-avatar>
         </v-btn>
       </template>
@@ -37,9 +39,12 @@
 
   <v-main>
     <v-container>
-      <h3 class="text-h5 text-blue-grey cursor-pointer" @click="$router.replace('/')">
+      <span
+        class="header pa-2 rounded-lg text-h5 text-blue-grey cursor-pointer"
+        @click="$router.replace('/')"
+      >
         Merchantile App
-      </h3>
+      </span>
       <div class="mt-12">
         <slot />
       </div>
@@ -49,7 +54,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import store from '../store/store';
+import store from "../store/store";
 
 const route = useRoute();
 
@@ -100,4 +105,11 @@ const items = [
   },
 ];
 </script>
-<style scoped></style>
+<style scoped>
+.header {
+  transition: all 0.2s ease;
+}
+.header:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+</style>
