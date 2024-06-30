@@ -87,18 +87,12 @@
   <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
   <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
 
-  <!-- loading bar -->
-  <v-progress-circular
-    class="loading-bar"
-    v-if="isLoading"
-    :size="90"
-    :width="9"
-    color="blue-grey"
-    indeterminate
-  ></v-progress-circular>
+  <!-- Loading bar -->
+  <Loading v-if="isLoading" />
 </template>
 
 <script setup>
+import Loading from "../components/Loading.vue";
 import { onMounted, ref } from "vue";
 import store from "../store/store";
 import { useRoute } from "vue-router";
@@ -112,20 +106,26 @@ const myFavorites = ref([]);
 const mySaved = ref([]);
 const isAddedFav = ref(false);
 const isAddedSave = ref(false);
+const db = getDb();
 
 // added favorites
 const addMyFavorites = async (item) => {
   const favRef = collection(db, "favorites");
-  const q = query(favRef, where("favUserId", "==", store.getters.getUserId));
-  const qs = await getDocs(q);
-  const isExist = qs.docs.length;
+  const userFavQuery = query(
+    favRef,
+    where("favUserId", "==", store.getters.getUserId),
+    where("id", "==", item.id)
+  );
+  const qs = await getDocs(userFavQuery);
+  const isExist = qs.docs.length > 0;
 
-  // add favorites collection in database
   if (!isExist) {
-    const docRef = await addDoc(collection(db, "favorites"), {
+    // Add favorites collection in database
+    await addDoc(favRef, {
       ...item,
       favUserId: store.getters.getUserId,
     });
+
     const arr = [...productData.value];
     const idx = arr.findIndex((i) => i.id === item.id);
     arr[idx].isFav = true;
@@ -135,16 +135,11 @@ const addMyFavorites = async (item) => {
     setTimeout(() => {
       isAddedFav.value = false;
     }, 2000);
-  }
-  // remove from favorites collection in database
-  else {
-    const q = query(
-      favRef,
-      where("favUserId", "==", store.getters.getUserId),
-      where("id", "==", item.id)
-    );
-    const qs = await getDocs(q);
-    await deleteDoc(qs.docs[0].ref);
+  } else {
+    // Remove from favorites collection in database
+    const docRef = qs.docs[0].ref;
+    await deleteDoc(docRef);
+
     const arr = [...productData.value];
     const idx = arr.findIndex((i) => i.id === item.id);
     arr[idx].isFav = false;
@@ -155,16 +150,17 @@ const addMyFavorites = async (item) => {
 // added saved
 const addMySaved = async (item) => {
   const savedRef = collection(db, "saved");
-  const q = query(savedRef, where("savedUserId", "==", store.getters.getUserId));
-  const qs = await getDocs(q);
-  const isExist = qs.docs.length;
+  const userSavedQuery = query(savedRef, where("savedUserId", "==", store.getters.getUserId), where("id", "==", item.id));
+  const qs = await getDocs(userSavedQuery);
+  const isExist = qs.docs.length > 0;
 
-  // add saved collection in database
   if (!isExist) {
-    const docRef = await addDoc(collection(db, "saved"), {
+    // Add saved collection in database
+    await addDoc(savedRef, {
       ...item,
       savedUserId: store.getters.getUserId,
     });
+
     const arr = [...productData.value];
     const idx = arr.findIndex((i) => i.id === item.id);
     arr[idx].isSaved = true;
@@ -174,22 +170,18 @@ const addMySaved = async (item) => {
     setTimeout(() => {
       isAddedSave.value = false;
     }, 2000);
-  }
-  // remove from saved collection in database
-  else {
-    const q = query(
-      savedRef,
-      where("savedUserId", "==", store.getters.getUserId),
-      where("id", "==", item.id)
-    );
-    const qs = await getDocs(q);
-    await deleteDoc(qs.docs[0].ref);
+  } else {
+    // Remove from saved collection in database
+    const docRef = qs.docs[0].ref;
+    await deleteDoc(docRef);
+
     const arr = [...productData.value];
     const idx = arr.findIndex((i) => i.id === item.id);
     arr[idx].isSaved = false;
     productData.value = [...arr];
   }
 };
+
 
 // control favorite item
 const getMyFavorites = async () => {
@@ -227,7 +219,6 @@ const shareData = async (item) => {
 
 const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
 const productData = ref([]);
-const db = getDb();
 
 const getDataByCategory = async (categoryId) => {
   isLoading.value = true;
@@ -314,11 +305,5 @@ onMounted(async () => {
 .card:hover {
   scale: 0.9;
   box-shadow: 0 0 2.5rem #668290;
-}
-.loading-bar {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 </style>

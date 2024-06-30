@@ -1,1 +1,1 @@
-## category page 
+## ürünlerim sayfasında kaldım

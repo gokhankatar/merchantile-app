@@ -1,10 +1,9 @@
 <template>
-
   <div
     v-if="isLoading === false && categoriesData.length === 0"
     class="d-flex justify-center align-center"
   >
-  <h3 class="text-subtitle-1 text-sm-h3">Sorry no categories available yet!</h3>
+    <h3 class="text-subtitle-1 text-sm-h3">Sorry no categories available yet!</h3>
   </div>
 
   <v-table class="my-10" hover v-show="isLoading === false">
@@ -35,17 +34,11 @@
     </tbody>
   </v-table>
 
-   <!-- loading bar -->
-   <v-progress-circular
-    class="loading-bar"
-    v-if="isLoading"
-    :size="90"
-    :width="9"
-    color="blue-grey"
-    indeterminate
-  ></v-progress-circular>
+  <!-- Loading bar -->
+  <Loading v-if="isLoading" />
 </template>
 <script setup>
+import Loading from "../components/Loading.vue";
 import { ref, onMounted } from "vue";
 import { getDb } from "../db/db";
 import { collection, getDocs } from "firebase/firestore";
@@ -66,12 +59,3 @@ onMounted(async () => {
   isLoading.value = false;
 });
 </script>
-
-<style scoped>
-.loading-bar {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-</style>
