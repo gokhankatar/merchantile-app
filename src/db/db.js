@@ -10,10 +10,10 @@ import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
 let app;
-
 export const initFirebase = () => {
+    const api_key = import.meta.env.VITE_FIREBASE_API_KEY;
     const firebaseConfig = {
-        apiKey: "AIzaSyDqcELbP1Ybt-2vUBYZDTKT61YRZ67A1M4",
+        apiKey: api_key,
         authDomain: "merchantile-app.firebaseapp.com",
         projectId: "merchantile-app",
         storageBucket: "merchantile-app.appspot.com",
@@ -35,4 +35,4 @@ export const getDb = () => {
     }
 };
 
-export default app ;
+export default app;
