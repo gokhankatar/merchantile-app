@@ -20,6 +20,7 @@
 - Vuex
 - Vuex-Persist
 - Firebase
+- Rest API
 - Axios
 
 ## Login Page (first of all you need to create an account first!)
