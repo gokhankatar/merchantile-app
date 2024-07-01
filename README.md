@@ -13,6 +13,7 @@
 ## Technologies
 
 - Vue
+- Composition API
 - Vite
 - Vuetify
 - Vue Router
