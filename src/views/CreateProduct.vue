@@ -78,6 +78,12 @@
               return-object
               label="Category"
             />
+            <v-avatar
+              class="mb-4"
+              :image="model.imageUrl"
+              v-if="model.imageUrl"
+              size="80"
+            />
             <v-file-input
               class="my-2"
               v-model="model.file"
@@ -104,13 +110,17 @@
 </template>
 
 <script setup>
-import { addDoc, collection, getDocs } from "firebase/firestore";
-import { getStorage, uploadBytes, ref as fileRef } from "firebase/storage";
+import { addDoc, collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getStorage,
+  uploadBytes,
+  ref as storageRef,
+  deleteObject,
+} from "firebase/storage";
 import { onMounted, ref, reactive } from "vue";
 import { getDb } from "../db/db";
 import { useRoute, useRouter } from "vue-router";
 import store from "../store/store";
-import { errorMessages } from "vue/compiler-sfc";
 
 const route = useRoute();
 const router = useRouter();
@@ -118,6 +128,7 @@ const router = useRouter();
 const formRef = ref(null);
 const isValid = ref(true);
 const db = getDb();
+const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
 
 const categoriesData = reactive([]);
 
@@ -129,6 +140,7 @@ const model = reactive({
   address: "",
   category: "",
   file: "",
+  imageUrl: "",
 });
 
 // model rules for form validation
@@ -150,14 +162,19 @@ const modelRules = reactive({
   file: [(v) => !!v || "File is required!"],
 });
 
-// upload image
 const upLoadImage = async () => {
-  const storage = getStorage();
-  const fileName = Date.now().toString() + "_" + model.file.name;
-  const imageRef = fileRef(storage, "images/" + fileName);
-  const data = await uploadBytes(imageRef, model.file);
-  return fileName;
+  try {
+    const storage = getStorage();
+    const fileName = Date.now().toString() + "_" + model.file.name;
+    const imageRef = storageRef(storage, "images/" + fileName); 
+    const data = await uploadBytes(imageRef, model.file);
+    return fileName;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
 };
+
 
 // create product
 const createProduct = async () => {
@@ -178,20 +195,76 @@ const createProduct = async () => {
   }
 };
 
+// before delete data for edit product
+const deleteFile = async (img) => {
+  try {
+    const storage = getStorage();
+    const fName = img;
+    const fileRef = storageRef(storage, "images/" + fName);
+    const response = await deleteObject(fileRef);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// edit product
+const editProduct = async () => {
+  try {
+    const docRef = doc(db, "products", route.params.id);
+    let file = model.imageUrl.split("%2F")[1].split("?")[0];
+    if (model.file) {
+      await deleteFile(file);
+      const newFileName = await upLoadImage();
+      file = newFileName;
+    }
+    const updateData = {
+      name: model.name,
+      description: model.description,
+      price: model.price,
+      address: model.address,
+      category: model.category,
+      userId: store.getters.getUserId,
+      image: file,
+    };
+    await setDoc(docRef, updateData);
+    router.replace('/my-products');
+  } catch (error) {
+    console.error("Error editing product:", error);
+  }
+};
+
 // form validate
 const validate = async () => {
   const { valid } = await formRef.value.validate();
-  if (!model.file) {
+  if (!model.file && model.imageUrl === "") {
     modelRules.file = true;
   } else {
     modelRules.file = false;
   }
-  if (valid && model.file) {
+  if ((valid && model.file) || model.imageUrl) {
     if (route.params.id) {
-      //todo edit
+      editProduct();
+      // todo
     } else {
       createProduct();
     }
+  }
+};
+
+// get product infos
+const getProductDetail = async (id) => {
+  const docRef = doc(db, "products", id);
+  const ds = await getDoc(docRef);
+
+  if (ds.exists()) {
+    model.name = ds.data().name;
+    model.description = ds.data().description;
+    model.price = ds.data().price;
+    model.address = ds.data().address;
+    model.category = ds.data().category;
+    model.imageUrl = imgUrl + ds.data().image + "?alt=media";
+  } else {
+    router.replace("/");
   }
 };
 
@@ -206,7 +279,7 @@ onMounted(async () => {
   });
 
   if (route.params.id) {
-    //TODO düzenleme
+    getProductDetail(route.params.id);
   }
 });
 </script>

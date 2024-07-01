@@ -116,7 +116,6 @@ const onLogin = () => {
 
       // after login with successfully
       error.value = false;
-      console.log("res data", res.data);
       router.replace("/");
     })
     // ! error state

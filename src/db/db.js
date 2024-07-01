@@ -26,3 +26,5 @@ export const getDb = () => {
         return db;
     }
 };
+
+export default app ;

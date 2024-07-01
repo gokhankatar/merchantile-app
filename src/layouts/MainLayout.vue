@@ -14,7 +14,23 @@
       </template>
 
       <v-card>
-        <v-card-text>Text</v-card-text>
+        <v-card-text>
+          <div class="mx-auto text-center">
+            <v-btn
+              variant="text"
+              color="green"
+              class="w-100"
+              @click="$router.replace('/my-selled-products')"
+              >Selled Products</v-btn
+            >
+
+            <v-divider class="my-3" />
+
+            <v-btn variant="outlined" class="w-100 bg-red border-none" @click="onLogout"
+              >Logout</v-btn
+            >
+          </div>
+        </v-card-text>
       </v-card>
     </v-menu>
   </v-app-bar>
@@ -53,13 +69,23 @@
 </template>
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import store from "../store/store";
+import { getAuth } from "firebase/auth";
+import app from "../db/db";
 
 const route = useRoute();
+const router = useRouter();
 
 const drawer = ref(false);
 const activeRouteItem = ref(null);
+
+const onLogout = () => {
+  const user = getAuth(app);
+  localStorage.clear();
+  router.replace("/signin");
+  user.signOut();
+};
 
 watch(
   () => route.path,
@@ -89,14 +115,19 @@ const items = [
     icon: "mdi-heart",
   },
   {
+    title: "My Saved Products",
+    value: "/my-saved",
+    icon: "mdi-content-save",
+  },
+  {
+    title: "My Selled Products",
+    value: "/my-selled-products",
+    icon: "mdi-check",
+  },
+  {
     title: "Create/Edit Product",
     value: "/create-product",
     icon: "mdi-plus",
-  },
-  {
-    title: "Saved Products",
-    value: "/my-saved",
-    icon: "mdi-content-save",
   },
   {
     title: "Categories",

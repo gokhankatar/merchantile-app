@@ -11,6 +11,7 @@ import MyFavorites from '../views/MyFavorites.vue';
 import MySaved from '../views/MySaved.vue';
 import Categories from '../views/Categories.vue';
 import ProductDetail from '../views/ProductDetail.vue';
+import MySelledProducts from '../views/MySelledProducts.vue';
 
 const routes = [
     {
@@ -59,6 +60,26 @@ const routes = [
         component: CreateProduct,
         meta: {
             title: 'Create Product',
+            layout: MainLayout,
+            public: true
+        }
+    },
+    {
+        path: '/edit-product/:id',
+        name: "EditProductPage",
+        component: CreateProduct,
+        meta: {
+            title: 'Edit Product',
+            layout: MainLayout,
+            public: true
+        }
+    },
+    {
+        path: '/my-selled-products',
+        name: "SelledProductPage",
+        component: MySelledProducts,
+        meta: {
+            title: 'Selled Products',
             layout: MainLayout,
             public: true
         }

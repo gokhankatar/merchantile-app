@@ -3,7 +3,9 @@
     v-if="isLoading === false && myProductsData.length === 0"
     class="d-flex justify-center align-center"
   >
-    <h3 class="text-subtitle-1 text-sm-h4 text-md-h3">Sorry no products available yet!</h3>
+    <h3 class="text-subtitle-1 text-sm-h4 text-md-h3">
+      Sorry no products available yet!
+    </h3>
   </div>
 
   <v-table v-if="isLoading == false && myProductsData.length > 0" class="my-10" hover>
@@ -29,7 +31,7 @@
           <v-tooltip location="top">
             <template v-slot:activator="{ props }">
               <v-icon
-                @click="$router.replace('/edit-product' + item.id)"
+                @click="setSelled(item)"
                 v-bind="props"
                 color="green"
                 icon="mdi-check"
@@ -41,7 +43,7 @@
           <v-tooltip location="top">
             <template v-slot:activator="{ props }">
               <v-icon
-                @click="$router.replace('/edit-product' + item.id)"
+                @click="$router.replace('/edit-product/' + item.id)"
                 v-bind="props"
                 color="primary"
                 icon="mdi-file-edit"
@@ -106,11 +108,21 @@
 import { ref, onMounted } from "vue";
 import { getDb } from "../db/db.js";
 import Loading from "../components/Loading.vue";
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useStore } from "vuex";
 import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
+import { useRouter } from "vue-router";
 
 const store = useStore();
+const router = useRouter();
 
 const isLoading = ref(false);
 const dialog = ref(false);
@@ -123,6 +135,18 @@ const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
 const cancelProduct = () => {
   dialog.value = false;
   actionItem.value = {};
+};
+
+const setSelled = async (item) => {
+  try {
+    const docRef = doc(db, "products", item.id);
+    await deleteDoc(docRef);
+    addDoc(collection(db, "selled"), item).then(() => {
+      router.replace("/my-selled-products");
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // before update actionItem for deleting
