@@ -3,15 +3,12 @@
     v-if="isLoading === false && myFavorites.length === 0"
     class="d-flex justify-center align-center"
   >
-    <h3 class="text-subtitle-1 text-sm-h3">Sorry no favorites available yet! You are directed to the home page</h3>
+    <h3 class="text-subtitle-1 text-sm-h3">
+      Sorry no favorites available yet! You are directed to the home page
+    </h3>
   </div>
 
-  <v-table
-    v-if="myFavorites.length >= 1"
-    class="my-10"
-    hover
-    v-show="isLoading === false"
-  >
+  <v-table v-if="isLoading === false && myFavorites.length >= 1" class="my-10" hover>
     <thead>
       <tr>
         <th>Preview</th>
@@ -25,7 +22,7 @@
     <tbody>
       <tr v-for="item of myFavorites" :key="item">
         <td class="my-3 text-uppercase">
-          <v-img :src="imgUrl + item.image + '?alt=media'" width="100" height="100" />
+          <v-img :src="imgUrl + item.image + '?alt=media'" width="100" />
         </td>
         <td>{{ item.name }}</td>
         <td>{{ item.price }} $</td>

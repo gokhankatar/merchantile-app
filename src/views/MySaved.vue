@@ -8,7 +8,7 @@
     </h3>
   </div>
 
-  <v-table v-if="mySaved.length >= 1" class="my-10" hover v-show="isLoading === false">
+  <v-table v-if="isLoading === false && mySaved.length >= 1" class="my-10" hover>
     <thead>
       <tr>
         <th>Preview</th>
@@ -22,7 +22,7 @@
     <tbody>
       <tr v-for="item of mySaved" :key="item">
         <td class="my-3 text-uppercase">
-          <v-img :src="imgUrl + item.image + '?alt=media'" width="100" height="100" />
+          <v-img :src="imgUrl + item.image + '?alt=media'" width="100" />
         </td>
         <td>{{ item.name }}</td>
         <td>{{ item.price }} $</td>

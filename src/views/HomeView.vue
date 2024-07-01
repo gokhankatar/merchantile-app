@@ -182,7 +182,6 @@ const addMySaved = async (item) => {
   }
 };
 
-
 // control favorite item
 const getMyFavorites = async () => {
   const favRef = collection(db, "favorites");
