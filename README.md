@@ -10,6 +10,17 @@
 - View products from relevant categories.
 - View the products you have uploaded to the platform together on your "My Products" page
 
+## Technologies
+
+- Vue
+- Vite
+- Vuetify
+- Vue Router
+- Vuex
+- Vuex-Persist
+- Firebase
+- Axios
+
 ## Login Page (first of all you need to create an account first!)
 <img src="src/screenshots/logIn.png" />
 
