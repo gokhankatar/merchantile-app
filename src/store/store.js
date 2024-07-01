@@ -21,6 +21,14 @@ const store = createStore({
         }
     },
     getters: {
+        getName(state) {
+            const name = state.fullName;
+            if (name) {
+                return name;
+            } else {
+                return 'NA'
+            }
+        },
         getFullName(state) {
             const fullName = state.fullName;
 

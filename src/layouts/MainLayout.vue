@@ -94,6 +94,10 @@ const items = [
       <v-card>
         <v-card-text>
           <div class="mx-auto text-center">
+
+          <p class="text-caption">Welcome <span class="text-blue-grey text-subtitle-1">{{ store.getters.getName }}</span></p>
+
+          <v-divider class="my-3" />
             <v-btn
               variant="text"
               color="green"
