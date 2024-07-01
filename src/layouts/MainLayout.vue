@@ -1,3 +1,81 @@
+<script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
+import { ref, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import store from "../store/store";
+import { getAuth } from "firebase/auth";
+import app from "../db/db";
+
+const route = useRoute();
+const router = useRouter();
+
+const drawer = ref(false);
+const activeRouteItem = ref(null);
+
+const onLogout = () => {
+  const user = getAuth(app);
+  localStorage.clear();
+  router.replace("/signin");
+  user.signOut();
+};
+
+watch(
+  () => route.path,
+  (newPath) => {
+    activeRouteItem.value = items.find((x) => x.value.includes(route.path));
+  }
+);
+
+onMounted(() => {
+  activeRouteItem.value = items.find((x) => x.value.includes(route.path));
+});
+
+const items = [
+  {
+    title: "Home",
+    value: "/",
+    icon: "mdi-home",
+  },
+  {
+    title: "My Products",
+    value: "/my-products",
+    icon: "mdi-box-shadow",
+  },
+  {
+    title: "My Favorites",
+    value: "/my-favorites",
+    icon: "mdi-heart",
+  },
+  {
+    title: "My Saved Products",
+    value: "/my-saved",
+    icon: "mdi-content-save",
+  },
+  {
+    title: "My Selled Products",
+    value: "/my-selled-products",
+    icon: "mdi-check",
+  },
+  {
+    title: "Create/Edit Product",
+    value: "/create-product",
+    icon: "mdi-plus",
+  },
+  {
+    title: "Categories",
+    value: "/categories",
+    icon: "mdi-shape",
+  },
+];
+</script>
+
 <template>
   <v-app-bar class="d-flex justify-space-between px-5">
     <v-btn icon="mdi-menu" @click="drawer = !drawer"></v-btn>
@@ -67,75 +145,7 @@
     </v-container>
   </v-main>
 </template>
-<script setup>
-import { ref, onMounted, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import store from "../store/store";
-import { getAuth } from "firebase/auth";
-import app from "../db/db";
 
-const route = useRoute();
-const router = useRouter();
-
-const drawer = ref(false);
-const activeRouteItem = ref(null);
-
-const onLogout = () => {
-  const user = getAuth(app);
-  localStorage.clear();
-  router.replace("/signin");
-  user.signOut();
-};
-
-watch(
-  () => route.path,
-  (newPath) => {
-    activeRouteItem.value = items.find((x) => x.value.includes(route.path));
-  }
-);
-
-onMounted(() => {
-  activeRouteItem.value = items.find((x) => x.value.includes(route.path));
-});
-
-const items = [
-  {
-    title: "Home",
-    value: "/",
-    icon: "mdi-home",
-  },
-  {
-    title: "My Products",
-    value: "/my-products",
-    icon: "mdi-box-shadow",
-  },
-  {
-    title: "My Favorites",
-    value: "/my-favorites",
-    icon: "mdi-heart",
-  },
-  {
-    title: "My Saved Products",
-    value: "/my-saved",
-    icon: "mdi-content-save",
-  },
-  {
-    title: "My Selled Products",
-    value: "/my-selled-products",
-    icon: "mdi-check",
-  },
-  {
-    title: "Create/Edit Product",
-    value: "/create-product",
-    icon: "mdi-plus",
-  },
-  {
-    title: "Categories",
-    value: "/categories",
-    icon: "mdi-shape",
-  },
-];
-</script>
 <style scoped>
 .header {
   transition: all 0.2s ease;

@@ -1,14 +1,12 @@
-<template>
-  <v-app theme="dark">
-    <v-container>
-      <component :is="$route.meta.layout">
-        <router-view />
-      </component>
-    </v-container>
-  </v-app>
-</template>
-
 <script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { initFirebase } from "./db/db";
 import store from "./store/store";
 import { useRouter } from "vue-router";
@@ -48,3 +46,15 @@ const controlUser = () => {
 
 controlUser();
 </script>
+
+<template>
+  <v-app theme="dark">
+    <v-container>
+      <component :is="$route.meta.layout">
+        <router-view />
+      </component>
+    </v-container>
+  </v-app>
+</template>
+
+

@@ -1,3 +1,13 @@
+<script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+</script>
+
 <template>
   <v-container class="container fill-height my-0 my-md-5">
     <v-row class="d-flex justify-center align-center">
@@ -7,5 +17,3 @@
     </v-row>
   </v-container>
 </template>
-<script setup></script>
-<style scoped></style>

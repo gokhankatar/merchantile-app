@@ -1,115 +1,12 @@
-<template>
-  <v-row>
-    <v-col>
-      <v-card>
-        <div class="text-center">
-          <h1 class="my-5">{{ $route.params.id ? "Edit Product" : "Create Product" }}</h1>
-        </div>
-        <v-card-text>
-          <v-form
-            v-model="isValid"
-            @submit.prevent="validate"
-            lazy-validation
-            ref="formRef"
-          >
-            <v-text-field
-              v-model="model.name"
-              :rules="modelRules.nameRules"
-              type="text"
-              color="blue-grey"
-              required
-              autofocus
-              clearable
-              label="Product name"
-              prepend-inner-icon="mdi-pen"
-              variant="outlined"
-            />
-            <v-textarea
-              class="my-2"
-              v-model="model.description"
-              :rules="modelRules.descriptionRules"
-              counter="140"
-              color="blue-grey"
-              required
-              autofocus
-              clearable
-              label="Product details"
-              prepend-inner-icon="mdi-comment"
-              variant="outlined"
-            />
-            <v-text-field
-              class="my-2"
-              v-model="model.price"
-              :rules="modelRules.priceRules"
-              type="number"
-              color="blue-grey"
-              prefix="$"
-              required
-              autofocus
-              clearable
-              min="1"
-              label="Product price"
-              prepend-inner-icon="mdi-cash"
-              variant="outlined"
-            />
-            <v-textarea
-              class="my-2"
-              v-model="model.address"
-              :rules="modelRules.addressRules"
-              counter="70"
-              color="blue-grey"
-              required
-              autofocus
-              clearable
-              label="Address"
-              prepend-inner-icon="mdi-map-marker"
-              variant="outlined"
-            />
-            <v-select
-              class="my-2"
-              v-model="model.category"
-              :rules="modelRules.categoryRules"
-              :items="categoriesData"
-              variant="outlined"
-              required
-              clearable
-              item-title="name"
-              item-value="id"
-              return-object
-              label="Category"
-            />
-            <v-avatar
-              class="mb-4"
-              :image="model.imageUrl"
-              v-if="model.imageUrl"
-              size="80"
-            />
-            <v-file-input
-              class="my-2"
-              v-model="model.file"
-              :rules="modelRules.file"
-              color="blue-grey"
-              :prepend-icon="null"
-              prepend-inner-icon="mdi-file"
-              required
-              variant="outlined"
-              label="Product-image"
-              accept="image/png,image/jpeg,image/jpg"
-              clearable
-              show-size
-            />
-
-            <v-btn block color="blue-grey" type="submit">{{
-              $route.params.id ? "Save" : "Create"
-            }}</v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
-</template>
-
 <script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { addDoc, collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
 import {
   getStorage,
@@ -283,4 +180,115 @@ onMounted(async () => {
   }
 });
 </script>
-<style scoped></style>
+
+<template>
+  <v-row>
+    <v-col>
+      <v-card>
+        <div class="text-center">
+          <h1 class="my-5">{{ $route.params.id ? "Edit Product" : "Create Product" }}</h1>
+        </div>
+        <v-card-text>
+          <v-form
+            v-model="isValid"
+            @submit.prevent="validate"
+            lazy-validation
+            ref="formRef"
+          >
+            <v-text-field
+              v-model="model.name"
+              :rules="modelRules.nameRules"
+              type="text"
+              color="blue-grey"
+              required
+              autofocus
+              clearable
+              label="Product name"
+              prepend-inner-icon="mdi-pen"
+              variant="outlined"
+            />
+            <v-textarea
+              class="my-2"
+              v-model="model.description"
+              :rules="modelRules.descriptionRules"
+              counter="140"
+              color="blue-grey"
+              required
+              autofocus
+              clearable
+              label="Product details"
+              prepend-inner-icon="mdi-comment"
+              variant="outlined"
+            />
+            <v-text-field
+              class="my-2"
+              v-model="model.price"
+              :rules="modelRules.priceRules"
+              type="number"
+              color="blue-grey"
+              prefix="$"
+              required
+              autofocus
+              clearable
+              min="1"
+              label="Product price"
+              prepend-inner-icon="mdi-cash"
+              variant="outlined"
+            />
+            <v-textarea
+              class="my-2"
+              v-model="model.address"
+              :rules="modelRules.addressRules"
+              counter="70"
+              color="blue-grey"
+              required
+              autofocus
+              clearable
+              label="Address"
+              prepend-inner-icon="mdi-map-marker"
+              variant="outlined"
+            />
+            <v-select
+              class="my-2"
+              v-model="model.category"
+              :rules="modelRules.categoryRules"
+              :items="categoriesData"
+              variant="outlined"
+              required
+              clearable
+              item-title="name"
+              item-value="id"
+              return-object
+              label="Category"
+            />
+            <v-avatar
+              class="mb-4"
+              :image="model.imageUrl"
+              v-if="model.imageUrl"
+              size="80"
+            />
+            <v-file-input
+              class="my-2"
+              v-model="model.file"
+              :rules="modelRules.file"
+              color="blue-grey"
+              :prepend-icon="null"
+              prepend-inner-icon="mdi-file"
+              required
+              variant="outlined"
+              label="Product-image"
+              accept="image/png,image/jpeg,image/jpg"
+              clearable
+              show-size
+            />
+
+            <v-btn block color="blue-grey" type="submit">{{
+              $route.params.id ? "Save" : "Create"
+            }}</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
+</template>
+

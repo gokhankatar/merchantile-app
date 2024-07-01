@@ -1,3 +1,33 @@
+<script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+import Loading from "../components/Loading.vue";
+import { ref, onMounted } from "vue";
+import { getDb } from "../db/db";
+import { collection, getDocs } from "firebase/firestore";
+
+const db = getDb();
+const isLoading = ref(false);
+const categoriesData = ref([]);
+
+onMounted(async () => {
+  isLoading.value = true;
+  const qs = await getDocs(collection(db, "categories"));
+  qs.forEach((doc) => {
+    categoriesData.value.push({
+      ...doc.data(),
+      id: doc.id,
+    });
+  });
+  isLoading.value = false;
+});
+</script>
+
 <template>
   <div
     v-if="isLoading === false && categoriesData.length === 0"
@@ -37,25 +67,4 @@
   <!-- Loading bar -->
   <Loading v-if="isLoading" />
 </template>
-<script setup>
-import Loading from "../components/Loading.vue";
-import { ref, onMounted } from "vue";
-import { getDb } from "../db/db";
-import { collection, getDocs } from "firebase/firestore";
 
-const db = getDb();
-const isLoading = ref(false);
-const categoriesData = ref([]);
-
-onMounted(async () => {
-  isLoading.value = true;
-  const qs = await getDocs(collection(db, "categories"));
-  qs.forEach((doc) => {
-    categoriesData.value.push({
-      ...doc.data(),
-      id: doc.id,
-    });
-  });
-  isLoading.value = false;
-});
-</script>

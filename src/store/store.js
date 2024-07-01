@@ -1,3 +1,11 @@
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { createStore } from 'vuex'
 import VuexPersistence from 'vuex-persist';
 

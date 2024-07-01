@@ -1,89 +1,12 @@
-<template>
-  <v-row v-if="isLoading == false">
-    <div class="my-10 w-100 d-flex flex-column align-sm-center flex-sm-row ga-2 ga-sm-5">
-      <v-img
-        :src="imgUrl + productDetailData.image + '?alt=media'"
-        class="rounded"
-        max-height="400px"
-        max-width="700"
-      />
-      <div>
-        <v-tooltip v-if="userData?.id !== $store.getters.getUserId" location="top">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              @click="addMySaved(productDetailData)"
-              class="cursor-pointer"
-              v-bind="props"
-              color="primary"
-              :icon="
-                productDetailData.isSaved == false
-                  ? 'mdi-bookmark-outline'
-                  : 'mdi-bookmark'
-              "
-            />
-          </template>
-          Save
-        </v-tooltip>
-
-        <v-tooltip v-if="userData?.id !== $store.getters.getUserId" location="top">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              @click="addMyFavorites(productDetailData)"
-              class="cursor-pointer"
-              v-bind="props"
-              color="red"
-              :icon="productDetailData.isFav == false ? 'mdi-heart-outline' : 'mdi-heart'"
-            />
-          </template>
-          Favorite
-        </v-tooltip>
-
-        <h2 class="text-h2 my-5">Seller Info</h2>
-        <p>
-          <span class="text-subtitle-1 text-primary font-weight-bold">Seller :</span>
-          {{ userData?.fullName }}
-        </p>
-        <p>
-          <span class="text-subtitle-1 text-primary font-weight-bold">Email :</span>
-          {{ userData?.email }}
-        </p>
-        <h2 class="text-h2 my-5">Product Info</h2>
-        <p>
-          <span class="text-subtitle-1 text-primary font-weight-bold">Address :</span>
-          {{ productDetailData?.address }}
-        </p>
-        <p>
-          <span class="text-subtitle-1 text-primary font-weight-bold">Price :</span>
-          {{ productDetailData?.price }} $
-        </p>
-        <p>
-          <span class="text-subtitle-1 text-primary font-weight-bold">Description :</span>
-          {{ productDetailData?.description }}
-        </p>
-        <p>
-          <span class="text-subtitle-1 text-primary font-weight-bold">Category :</span>
-          {{ productDetailData?.category?.name }}
-        </p>
-      </div>
-    </div>
-  </v-row>
-
-  <!-- toast -->
-  <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
-  <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
-
-  <!-- loading bar -->
-  <v-progress-circular
-    class="loading-bar"
-    v-if="isLoading"
-    :size="90"
-    :width="9"
-    color="blue-grey"
-    indeterminate
-  ></v-progress-circular>
-</template>
-
 <script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { onMounted, ref } from "vue";
 import {
   collection,
@@ -237,6 +160,91 @@ onMounted(() => {
   isLoading.value = false;
 });
 </script>
+
+<template>
+  <v-row v-if="isLoading == false">
+    <div class="my-10 w-100 d-flex flex-column align-sm-center flex-sm-row ga-2 ga-sm-5">
+      <v-img
+        :src="imgUrl + productDetailData.image + '?alt=media'"
+        class="rounded"
+        max-height="400px"
+        max-width="700"
+      />
+      <div>
+        <v-tooltip v-if="userData?.id !== $store.getters.getUserId" location="top">
+          <template v-slot:activator="{ props }">
+            <v-icon
+              @click="addMySaved(productDetailData)"
+              class="cursor-pointer"
+              v-bind="props"
+              color="primary"
+              :icon="
+                productDetailData.isSaved == false
+                  ? 'mdi-bookmark-outline'
+                  : 'mdi-bookmark'
+              "
+            />
+          </template>
+          Save
+        </v-tooltip>
+
+        <v-tooltip v-if="userData?.id !== $store.getters.getUserId" location="top">
+          <template v-slot:activator="{ props }">
+            <v-icon
+              @click="addMyFavorites(productDetailData)"
+              class="cursor-pointer"
+              v-bind="props"
+              color="red"
+              :icon="productDetailData.isFav == false ? 'mdi-heart-outline' : 'mdi-heart'"
+            />
+          </template>
+          Favorite
+        </v-tooltip>
+
+        <h2 class="text-h2 my-5">Seller Info</h2>
+        <p>
+          <span class="text-subtitle-1 text-primary font-weight-bold">Seller :</span>
+          {{ userData?.fullName }}
+        </p>
+        <p>
+          <span class="text-subtitle-1 text-primary font-weight-bold">Email :</span>
+          {{ userData?.email }}
+        </p>
+        <h2 class="text-h2 my-5">Product Info</h2>
+        <p>
+          <span class="text-subtitle-1 text-primary font-weight-bold">Address :</span>
+          {{ productDetailData?.address }}
+        </p>
+        <p>
+          <span class="text-subtitle-1 text-primary font-weight-bold">Price :</span>
+          {{ productDetailData?.price }} $
+        </p>
+        <p>
+          <span class="text-subtitle-1 text-primary font-weight-bold">Description :</span>
+          {{ productDetailData?.description }}
+        </p>
+        <p>
+          <span class="text-subtitle-1 text-primary font-weight-bold">Category :</span>
+          {{ productDetailData?.category?.name }}
+        </p>
+      </div>
+    </div>
+  </v-row>
+
+  <!-- toast -->
+  <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
+  <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
+
+  <!-- loading bar -->
+  <v-progress-circular
+    class="loading-bar"
+    v-if="isLoading"
+    :size="90"
+    :width="9"
+    color="blue-grey"
+    indeterminate
+  ></v-progress-circular>
+</template>
 
 <style scoped>
 .loading-bar {

@@ -1,3 +1,11 @@
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue';
@@ -12,6 +20,7 @@ import MySaved from '../views/MySaved.vue';
 import Categories from '../views/Categories.vue';
 import ProductDetail from '../views/ProductDetail.vue';
 import MySelledProducts from '../views/MySelledProducts.vue';
+import store from '../store/store';
 
 const routes = [
     {
@@ -51,7 +60,7 @@ const routes = [
         meta: {
             title: 'My Products',
             layout: MainLayout,
-            public: true
+            public: false
         }
     },
     {
@@ -71,7 +80,7 @@ const routes = [
         meta: {
             title: 'Edit Product',
             layout: MainLayout,
-            public: true
+            public: false
         }
     },
     {
@@ -81,7 +90,7 @@ const routes = [
         meta: {
             title: 'Selled Products',
             layout: MainLayout,
-            public: true
+            public: false
         }
     },
     {
@@ -91,7 +100,7 @@ const routes = [
         meta: {
             title: 'My Favorites',
             layout: MainLayout,
-            public: true
+            public: false
         }
     },
     {
@@ -101,7 +110,7 @@ const routes = [
         meta: {
             title: 'My Saved',
             layout: MainLayout,
-            public: true
+            public: false
         }
     },
     {
@@ -130,6 +139,15 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+// router guard
+router.beforeEach((to, from, next) => {
+    if (to.meta.public || store.getters.getUserInfo.idToken) {
+        next();
+    } else {
+        next('/signin')
+    }
+})
 
 router.beforeEach((to, from, next) => {
     document.title = 'Merchantile App | ' + to.meta.title;

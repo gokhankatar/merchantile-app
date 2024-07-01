@@ -1,3 +1,110 @@
+<script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
+import { ref, onMounted } from "vue";
+import { getDb } from "../db/db.js";
+import Loading from "../components/Loading.vue";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { useStore } from "vuex";
+import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
+import { useRouter } from "vue-router";
+
+const store = useStore();
+const router = useRouter();
+
+const isLoading = ref(false);
+const dialog = ref(false);
+const isRemovedProduct = ref(false);
+const actionItem = ref({});
+const myProductsData = ref([]);
+const db = getDb();
+const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
+
+const cancelProduct = () => {
+  dialog.value = false;
+  actionItem.value = {};
+};
+
+const setSelled = async (item) => {
+  try {
+    const docRef = doc(db, "products", item.id);
+    await deleteDoc(docRef);
+    addDoc(collection(db, "selled"), item).then(() => {
+      router.replace("/my-selled-products");
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// before update actionItem for deleting
+const deleteMyProduct = (item) => {
+  dialog.value = !dialog.value;
+  actionItem.value = item;
+};
+
+// remove product from firebase/storage
+const deleteFile = async (img) => {
+  try {
+    const storage = getStorage();
+    const fName = img;
+    const fileRef = storageRef(storage, "images/" + fName);
+    const response = await deleteObject(fileRef);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// remove from database and update myProductsData
+const removeMyProduct = async () => {
+  try {
+    await deleteFile(actionItem.value.image);
+    const docRef = doc(db, "products", actionItem.value.id);
+    await deleteDoc(docRef);
+    myProductsData.value = myProductsData.value.filter(
+      (product) => product.id !== actionItem.value.id
+    );
+    dialog.value = false;
+    isRemovedProduct.value = true;
+    setTimeout(() => {
+      isRemovedProduct.value = false;
+    }, 2000);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onMounted(async () => {
+  isLoading.value = true;
+
+  const myProductRef = collection(db, "products");
+  const q = query(myProductRef, where("userId", "==", store.getters.getUserId));
+  const qs = await getDocs(q);
+  qs.forEach((doc) => {
+    myProductsData.value.push({
+      ...doc.data(),
+      id: doc.id,
+    });
+  });
+
+  isLoading.value = false;
+});
+</script>
+
 <template>
   <div
     v-if="isLoading === false && myProductsData.length === 0"
@@ -104,102 +211,5 @@
   <!-- Loading bar -->
   <Loading v-if="isLoading" />
 </template>
-<script setup>
-import { ref, onMounted } from "vue";
-import { getDb } from "../db/db.js";
-import Loading from "../components/Loading.vue";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { useStore } from "vuex";
-import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
-import { useRouter } from "vue-router";
 
-const store = useStore();
-const router = useRouter();
 
-const isLoading = ref(false);
-const dialog = ref(false);
-const isRemovedProduct = ref(false);
-const actionItem = ref({});
-const myProductsData = ref([]);
-const db = getDb();
-const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
-
-const cancelProduct = () => {
-  dialog.value = false;
-  actionItem.value = {};
-};
-
-const setSelled = async (item) => {
-  try {
-    const docRef = doc(db, "products", item.id);
-    await deleteDoc(docRef);
-    addDoc(collection(db, "selled"), item).then(() => {
-      router.replace("/my-selled-products");
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// before update actionItem for deleting
-const deleteMyProduct = (item) => {
-  dialog.value = !dialog.value;
-  actionItem.value = item;
-};
-
-// remove product from firebase/storage
-const deleteFile = async (img) => {
-  try {
-    const storage = getStorage();
-    const fName = img;
-    const fileRef = storageRef(storage, "images/" + fName);
-    const response = await deleteObject(fileRef);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// remove from database and update myProductsData
-const removeMyProduct = async () => {
-  try {
-    await deleteFile(actionItem.value.image);
-    const docRef = doc(db, "products", actionItem.value.id);
-    await deleteDoc(docRef);
-    myProductsData.value = myProductsData.value.filter(
-      (product) => product.id !== actionItem.value.id
-    );
-    dialog.value = false;
-    isRemovedProduct.value = true;
-    setTimeout(() => {
-      isRemovedProduct.value = false;
-    }, 2000);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-onMounted(async () => {
-  isLoading.value = true;
-
-  const myProductRef = collection(db, "products");
-  const q = query(myProductRef, where("userId", "==", store.getters.getUserId));
-  const qs = await getDocs(q);
-  qs.forEach((doc) => {
-    myProductsData.value.push({
-      ...doc.data(),
-      id: doc.id,
-    });
-  });
-
-  isLoading.value = false;
-});
-</script>
-<style scoped></style>

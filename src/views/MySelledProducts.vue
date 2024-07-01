@@ -1,3 +1,45 @@
+<script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
+import { ref, onMounted } from "vue";
+import { getDb } from "../db/db";
+import Loading from "../components/Loading.vue";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useStore } from "vuex";
+
+const store = useStore();
+
+const isLoading = ref(false);
+let totalPrice = ref(0);
+const mySelledProducts = ref([]);
+
+const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
+const db = getDb();
+
+onMounted(async () => {
+  isLoading.value = true;
+
+  const mySelledProductsRef = collection(db, "selled");
+  const q = query(mySelledProductsRef, where("userId", "==", store.getters.getUserId));
+  const qs = await getDocs(q);
+  qs.forEach((doc) => {
+    totalPrice.value += Number(doc.data().price);
+    mySelledProducts.value.push({
+      ...doc.data(),
+      id: doc.id,
+    });
+  });
+
+  isLoading.value = false;
+});
+</script>
+
 <template>
   <div
     v-if="isLoading === false && mySelledProducts.length === 0"
@@ -42,38 +84,3 @@
   <!-- Loading bar -->
   <Loading v-if="isLoading" />
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import { getDb } from "../db/db";
-import Loading from "../components/Loading.vue";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { useStore } from "vuex";
-
-const store = useStore();
-
-const isLoading = ref(false);
-let totalPrice = ref(0);
-const mySelledProducts = ref([]);
-
-const imgUrl = import.meta.env.VITE_FIRESTORAGE_IMG_URL;
-const db = getDb();
-
-onMounted(async () => {
-  isLoading.value = true;
-
-  const mySelledProductsRef = collection(db, "selled");
-  const q = query(mySelledProductsRef, where("userId", "==", store.getters.getUserId));
-  const qs = await getDocs(q);
-  qs.forEach((doc) => {
-    totalPrice.value += Number(doc.data().price);
-    mySelledProducts.value.push({
-      ...doc.data(),
-      id: doc.id,
-    });
-  });
-
-  isLoading.value = false;
-});
-</script>
-<style scoped></style>

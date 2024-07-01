@@ -1,3 +1,13 @@
+<script setup>
+/*
+ * @description : a merchantile application where user-interactive frontend and backend work together
+ * @author : Gokhan Katar
+ * @github : https://github.com/gokhankatar
+ * @x : https://twitter.com/gokhan_crypto/
+ * @instagram :  https://www.instagram.com/katargokhan96/
+ */
+</script>
+
 <template>
   <!-- loading bar -->
   <v-progress-circular
@@ -8,6 +18,7 @@
     indeterminate
   ></v-progress-circular>
 </template>
+
 <style scoped>
 .loading-bar {
   position: absolute;

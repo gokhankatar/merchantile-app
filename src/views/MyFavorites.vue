@@ -1,58 +1,12 @@
-<template>
-  <div
-    v-if="isLoading === false && myFavorites.length === 0"
-    class="d-flex justify-center align-center"
-  >
-    <h3 class="text-subtitle-1 text-sm-h3">
-      Sorry no favorites available yet! You are directed to the home page
-    </h3>
-  </div>
-
-  <v-table v-if="isLoading === false && myFavorites.length >= 1" class="my-10" hover>
-    <thead>
-      <tr>
-        <th>Preview</th>
-        <th>Product</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr v-for="item of myFavorites" :key="item">
-        <td class="my-3 text-uppercase">
-          <v-img :src="imgUrl + item.image + '?alt=media'" width="100" />
-        </td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.price }} $</td>
-        <td>{{ item.description }}</td>
-        <td>
-          <v-tooltip location="top">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                @click="removeFavorites(item)"
-                v-bind="props"
-                color="red"
-                icon="mdi-delete"
-              />
-            </template>
-            Remove from your favorites
-          </v-tooltip>
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
-
-  <!-- toast -->
-  <v-snackbar v-model="isRemovedFav" color="red"
-    >Removed from your favorites !</v-snackbar
-  >
-
-  <!-- Loading bar -->
-  <Loading v-if="isLoading" />
-</template>
 <script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import Loading from "../components/Loading.vue";
 import { ref, onMounted } from "vue";
 import { getDb } from "../db/db";
@@ -108,4 +62,59 @@ onMounted(() => {
   isLoading.value = false;
 });
 </script>
-<style scoped></style>
+
+<template>
+  <div
+    v-if="isLoading === false && myFavorites.length === 0"
+    class="d-flex justify-center align-center"
+  >
+    <h3 class="text-subtitle-1 text-sm-h3">
+      Sorry no favorites available yet! You are directed to the home page
+    </h3>
+  </div>
+
+  <v-table v-if="isLoading === false && myFavorites.length >= 1" class="my-10" hover>
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr v-for="item of myFavorites" :key="item">
+        <td class="my-3 text-uppercase">
+          <v-img :src="imgUrl + item.image + '?alt=media'" width="100" />
+        </td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.price }} $</td>
+        <td>{{ item.description }}</td>
+        <td>
+          <v-tooltip location="top">
+            <template v-slot:activator="{ props }">
+              <v-icon
+                @click="removeFavorites(item)"
+                v-bind="props"
+                color="red"
+                icon="mdi-delete"
+              />
+            </template>
+            Remove from your favorites
+          </v-tooltip>
+        </td>
+      </tr>
+    </tbody>
+  </v-table>
+
+  <!-- toast -->
+  <v-snackbar v-model="isRemovedFav" color="red"
+    >Removed from your favorites !</v-snackbar
+  >
+
+  <!-- Loading bar -->
+  <Loading v-if="isLoading" />
+</template>
+

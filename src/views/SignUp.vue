@@ -1,70 +1,12 @@
-<template>
-  <v-card rounded="xl" class="card-wrapper mx-auto d-flex flex-column ga-2 px-5 py-1">
-    <div class="text-center">
-      <h1 class="mb-2 mt-10 text-uppercase">Register</h1>
-      <img src="../assets/logo-gksoftware.png" class="w-50" />
-    </div>
-
-    <div>
-      <v-form
-        class="d-flex flex-column ga-1"
-        ref="formRef"
-        @submit.prevent="validate"
-        v-model="valid"
-        lazy-validation
-      >
-        <v-text-field
-          v-model="model.fullName"
-          :rules="modelRules.fullNameRules"
-          prepend-inner-icon="mdi-account"
-          label="Full name"
-          color="blue-grey"
-          type="email"
-          variant="outlined"
-          clearable
-        />
-        <v-text-field
-          v-model="model.email"
-          :rules="modelRules.emailRules"
-          prepend-inner-icon="mdi-email"
-          label="Email"
-          color="blue-grey"
-          type="email"
-          variant="outlined"
-          clearable
-        />
-        <v-text-field
-          v-model="model.password"
-          :rules="modelRules.passwordRules"
-          prepend-inner-icon="mdi-lock"
-          label="Password"
-          color="blue-grey"
-          :type="showPassword ? 'text' : 'password'"
-          variant="outlined"
-          clearable
-        >
-          <template v-slot:append-inner>
-            <v-icon
-              :icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              @click="togglePasswordVisibility"
-            />
-          </template>
-        </v-text-field>
-        <v-btn block size="x-large" color="blue-grey" type="submit" variant="outlined"
-          >Register</v-btn
-        >
-      </v-form>
-    </div>
-
-    <v-card-actions>
-      <a @click="$router.replace('signin')" class="register-link mx-auto">
-        Already have an account? Login.
-      </a>
-    </v-card-actions>
-  </v-card>
-</template>
-
 <script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { getDb } from "../db/db";
 import { ref, reactive } from "vue";
 import { addDoc, collection } from "firebase/firestore";
@@ -132,6 +74,73 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
 </script>
+
+<template>
+  <v-card rounded="xl" class="card-wrapper mx-auto d-flex flex-column ga-2 px-5 py-1">
+    <div class="text-center">
+      <h1 class="mb-2 mt-10 text-uppercase">Register</h1>
+      <img src="../assets/logo-gksoftware.png" class="w-50" />
+    </div>
+
+    <div>
+      <v-form
+        class="d-flex flex-column ga-1"
+        ref="formRef"
+        @submit.prevent="validate"
+        v-model="valid"
+        lazy-validation
+      >
+        <v-text-field
+          v-model="model.fullName"
+          :rules="modelRules.fullNameRules"
+          prepend-inner-icon="mdi-account"
+          label="Full name"
+          color="blue-grey"
+          type="email"
+          variant="outlined"
+          clearable
+        />
+        <v-text-field
+          v-model="model.email"
+          :rules="modelRules.emailRules"
+          prepend-inner-icon="mdi-email"
+          label="Email"
+          color="blue-grey"
+          type="email"
+          variant="outlined"
+          clearable
+        />
+        <v-text-field
+          v-model="model.password"
+          :rules="modelRules.passwordRules"
+          prepend-inner-icon="mdi-lock"
+          label="Password"
+          color="blue-grey"
+          :type="showPassword ? 'text' : 'password'"
+          variant="outlined"
+          clearable
+        >
+          <template v-slot:append-inner>
+            <v-icon
+              :icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click="togglePasswordVisibility"
+            />
+          </template>
+        </v-text-field>
+        <v-btn block size="x-large" color="blue-grey" type="submit" variant="outlined"
+          >Register</v-btn
+        >
+      </v-form>
+    </div>
+
+    <v-card-actions>
+      <a @click="$router.replace('signin')" class="register-link mx-auto">
+        Already have an account? Login.
+      </a>
+    </v-card-actions>
+  </v-card>
+</template>
+
 <style scoped>
 .register-link {
   text-decoration: none;

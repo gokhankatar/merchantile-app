@@ -1,3 +1,11 @@
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 

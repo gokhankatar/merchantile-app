@@ -1,97 +1,12 @@
-<template>
-  <v-row class="d-flex flex-wrap ga-5 ga-sm-0">
-    <v-col
-      v-for="item of productData"
-      :key="item"
-      cols="12"
-      sm="12"
-      xs="12"
-      md="4"
-      lg="4"
-      xl="4"
-    >
-      <v-card class="card" hover>
-        <v-img
-          :src="imgUrl + item.image + '?alt=media'"
-          :lazy-src="imgUrl + item.image + '?alt=media'"
-          height="300px"
-          contain
-          cover
-          object-position="center"
-        />
-        <v-card-title>{{ item.name }}</v-card-title>
-        <v-card-subtitle class="my-2">{{ item.price }} $</v-card-subtitle>
-        <v-card-subtitle>
-          <v-chip size="small" prepend-icon="mdi-shape">{{ item.category.name }}</v-chip>
-        </v-card-subtitle>
-
-        <v-card-actions>
-          <v-btn
-            @click="$router.replace(`/product-detail/${item.id}`)"
-            class="bg-blue-grey border-none"
-            size="small"
-            rounded="xl"
-            variant="outlined"
-            >detail</v-btn
-          >
-
-          <v-spacer></v-spacer>
-          <v-tooltip v-if="item.userId !== $store.getters.getUserId" location="top">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                @click="addMySaved(item)"
-                v-bind="props"
-                color="primary"
-                :icon="item.isSaved == false ? 'mdi-bookmark-outline' : 'mdi-bookmark'"
-              />
-            </template>
-            Save
-          </v-tooltip>
-
-          <v-tooltip v-if="item.userId !== $store.getters.getUserId" location="top">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                @click="addMyFavorites(item)"
-                v-bind="props"
-                color="red"
-                :icon="item.isFav == false ? 'mdi-heart-outline' : 'mdi-heart'"
-              />
-            </template>
-            Favorite
-          </v-tooltip>
-
-          <v-tooltip location="top">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                @click="shareData(item)"
-                v-bind="props"
-                color="green"
-                icon="mdi-share"
-              />
-            </template>
-            Share
-          </v-tooltip>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
-
-  <div
-    v-if="isLoading === false && productData.length === 0"
-    class="d-flex justify-center align-center"
-  >
-    <h3 class="text-subtitle-1 text-sm-h3">Sorry no data available yet!</h3>
-  </div>
-
-  <!-- toast -->
-  <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
-  <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
-
-  <!-- Loading bar -->
-  <Loading v-if="isLoading" />
-</template>
-
 <script setup>
+/*
+* @description : a merchantile application where user-interactive frontend and backend work together
+* @author : Gokhan Katar
+* @github : https://github.com/gokhankatar
+* @x : https://twitter.com/gokhan_crypto/
+* @instagram :  https://www.instagram.com/katargokhan96/
+*/
+
 import Loading from "../components/Loading.vue";
 import { onMounted, ref } from "vue";
 import store from "../store/store";
@@ -296,6 +211,100 @@ onMounted(async () => {
   isLoading.value = false;
 });
 </script>
+
+
+<template>
+  <v-row class="d-flex flex-wrap ga-5 ga-sm-0">
+    <v-col
+      v-for="item of productData"
+      :key="item"
+      cols="12"
+      sm="12"
+      xs="12"
+      md="4"
+      lg="4"
+      xl="4"
+    >
+      <v-card class="card" hover>
+        <v-img
+          :src="imgUrl + item.image + '?alt=media'"
+          :lazy-src="imgUrl + item.image + '?alt=media'"
+          height="300px"
+          contain
+          cover
+          object-position="center"
+        />
+        <v-card-title>{{ item.name }}</v-card-title>
+        <v-card-subtitle class="my-2">{{ item.price }} $</v-card-subtitle>
+        <v-card-subtitle>
+          <v-chip size="small" prepend-icon="mdi-shape">{{ item.category.name }}</v-chip>
+        </v-card-subtitle>
+
+        <v-card-actions>
+          <v-btn
+            @click="$router.replace(`/product-detail/${item.id}`)"
+            class="bg-blue-grey border-none"
+            size="small"
+            rounded="xl"
+            variant="outlined"
+            >detail</v-btn
+          >
+
+          <v-spacer></v-spacer>
+          <v-tooltip v-if="item.userId !== $store.getters.getUserId" location="top">
+            <template v-slot:activator="{ props }">
+              <v-icon
+                @click="addMySaved(item)"
+                v-bind="props"
+                color="primary"
+                :icon="item.isSaved == false ? 'mdi-bookmark-outline' : 'mdi-bookmark'"
+              />
+            </template>
+            Save
+          </v-tooltip>
+
+          <v-tooltip v-if="item.userId !== $store.getters.getUserId" location="top">
+            <template v-slot:activator="{ props }">
+              <v-icon
+                @click="addMyFavorites(item)"
+                v-bind="props"
+                color="red"
+                :icon="item.isFav == false ? 'mdi-heart-outline' : 'mdi-heart'"
+              />
+            </template>
+            Favorite
+          </v-tooltip>
+
+          <v-tooltip location="top">
+            <template v-slot:activator="{ props }">
+              <v-icon
+                @click="shareData(item)"
+                v-bind="props"
+                color="green"
+                icon="mdi-share"
+              />
+            </template>
+            Share
+          </v-tooltip>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
+
+  <div
+    v-if="isLoading === false && productData.length === 0"
+    class="d-flex justify-center align-center"
+  >
+    <h3 class="text-subtitle-1 text-sm-h3">Sorry no data available yet!</h3>
+  </div>
+
+  <!-- toast -->
+  <v-snackbar v-model="isAddedFav" color="red">Added to your favorites</v-snackbar>
+  <v-snackbar v-model="isAddedSave" color="primary">Added to your saved</v-snackbar>
+
+  <!-- Loading bar -->
+  <Loading v-if="isLoading" />
+</template>
 
 <style scoped>
 .card {
